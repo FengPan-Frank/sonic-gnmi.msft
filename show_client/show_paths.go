@@ -245,6 +245,13 @@ func init() {
 		nil,
 	)
 	sdc.RegisterCliPath(
+		[]string{"SHOW", "dropcounters", "configuration"},
+		getDropCountersConfiguration,
+		nil,
+		sdc.UnimplementedOption(showCmdOptionNamespace),
+		showCmdOptionGroup,
+	)
+	sdc.RegisterCliPath(
 		[]string{"SHOW", "system-memory"},
 		getSystemMemory,
 		nil,
