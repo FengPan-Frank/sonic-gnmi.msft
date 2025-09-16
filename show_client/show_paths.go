@@ -346,7 +346,6 @@ func init() {
 		nil,
 		sdc.UnimplementedOption(showCmdOptionNamespace),
 		showCmdOptionDisplay,
-		showCmdOptionFrrRouteArgs,
 	)
 
 	// SHOW/lldp
