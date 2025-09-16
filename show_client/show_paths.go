@@ -286,8 +286,6 @@ func init() {
 		0,
 		2,
 		nil,
-		showCmdOptionIPV6Address,           // TODO
-		showCmdOptionInfoTypeForBgpNetwork, // TODO
 		sdc.UnimplementedOption(showCmdOptionNamespace),
 	)
 	sdc.RegisterCliPath(
