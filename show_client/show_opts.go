@@ -31,7 +31,6 @@ const (
 
 // Option keys
 const (
-	OptionKeyIpAddress = "ipaddress"
 	OptionKeyVerbose   = "verbose"
 	SonicCliIfaceMode  = "SONIC_CLI_IFACE_MODE"
 )
@@ -165,12 +164,6 @@ var (
 		"routes",
 		"advertised-routes",
 		"received-routes",
-	)
-
-	showCmdOptionIPV6Address = sdc.NewShowCmdOption(
-		OptionKeyIpAddress,
-		showCmdOptionIPV6AddressDesc,
-		sdc.StringValue,
 	)
 
 	showCmdOptionInfoTypeForBgpNetwork = sdc.NewShowCmdOption(
