@@ -94,6 +94,51 @@ func getInterfaceTransceiverPresence(args sdc.CmdArgs, options sdc.OptionMap) ([
 	return json.Marshal(status)
 }
 
+func getEEPROM(args sdc.CmdArgs, options sdc.OptionMap) (map[string]interface{}, error) {
+	intf := args.At(0)
+
+	var dumpDom bool
+	if v, ok := options["dom"].Bool(); ok {
+		dumpDom = v
+	}
+
+	var queries [][]string
+	queries = [][]string{
+		{"APPL_DB", "PORT_TABLE"},
+	}
+
+	portTable, err := GetMapFromQueries(queries)
+	if err != nil {
+		log.Errorf("Unable to pull data for queries %v, got err %v", queries, err)
+		return nil, err
+	}
+
+	intfEEPROM := make(map[string]interface{})
+	for iface := range portTable {
+		if intf != "" && iface != intf {
+			continue
+		}
+
+		role := GetFieldValueString(portTable, iface, defaultMissingCounterValue, "role")
+		if common.IsFrontPanelPort(iface, role) {
+			intfEEPROM[iface] = convertInterfaceSfpInfoToCliOutputString(iface, dumpDom)
+		} else {
+			continue
+		}
+
+	}
+	return intfEEPROM, nil
+}
+
+func getTransceiverInfo(args sdc.CmdArgs, options sdc.OptionMap) ([]byte, error) {
+	intfEEPROM, err := getEEPROM(args, options)
+	if err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(intfEEPROM)
+}
+
 type portLpmode struct {
 	Port   string `json:"Port"`
 	Lpmode string `json:"Low-power Mode"`
