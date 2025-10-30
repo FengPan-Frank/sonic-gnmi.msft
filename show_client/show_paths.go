@@ -845,6 +845,24 @@ func init() {
 		nil,
 	)
 
+	sdc.RegisterCliPath(
+		[]string{"SHOW", "feature", "status"},
+		getFeatureStatus,
+		"SHOW/feature/status/{FEATURE_NAME}[OPTIONS]: Show feature status",
+		0,
+		1,
+		nil,
+	)
+
+	sdc.RegisterCliPath(
+		[]string{"SHOW", "feature", "autorestart"},
+		getFeatureAutoRestart,
+		"SHOW/feature/autorestart/{FEATURE_NAME}[OPTIONS]: Show feature autorestart data",
+		0,
+		1,
+		nil,
+	)  
+
 	// SHOW/buffer
 	sdc.RegisterCliPath(
 		[]string{"SHOW", "buffer", "configuration"},
