@@ -493,7 +493,7 @@ func init() {
 	initRedisDbMap()
 }
 
-func NewMixedDbClient(paths []*gnmipb.Path, prefix *gnmipb.Path, origin string, encoding gnmipb.Encoding, zmqPort string, vrf string) (Client, error) {
+func NewMixedDbClient(paths []*gnmipb.Path, prefix *gnmipb.Path, origin string, encoding gnmipb.Encoding, zmqPort string, vrf string, targetDbName *string) (Client, error) {
 	var err error
 
 	// Initialize RedisDbMap for test
@@ -549,6 +549,7 @@ func NewMixedDbClient(paths []*gnmipb.Path, prefix *gnmipb.Path, origin string, 
 		client.applDB = swsscommon.NewDBConnector(target, SWSS_TIMEOUT, false, dbkey)
 	}
 	client.target = target
+	*targetDbName = target
 	ns := dbkey.GetNetns()
 	container := dbkey.GetContainerName()
 	client.mapkey = ns + ":" + container
