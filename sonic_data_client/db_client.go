@@ -680,6 +680,10 @@ func populateDbtablePath(prefix, path *gnmipb.Path, pathG2S *map[*gnmipb.Path][]
 		if err != nil {
 			log.Errorf("Could not create CountersSidMap: %v", err)
 		}
+		err = initCountersAclRuleMap()
+		if err != nil {
+			log.Errorf("Could not create CountersAclRuleMap: %v", err)
+		}
 	}
 
 	if targetDbName == "CONFIG_DB" {
