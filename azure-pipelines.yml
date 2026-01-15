@@ -85,21 +85,26 @@ stages:
       displayName: "Download bookworm debs"
 
     - script: |
-        # PYTEST
-        sudo pip3 install -U pytest
-        sudo pip3 install -U jsonpatch
-
-        # REDIS
+        set -ex
+        sudo apt-get clean
         sudo apt-get update
-        sudo apt-get install -y redis-server
+
+        sudo apt-get install -y \
+            libboost1.74-dev \
+            libboost-atomic1.74-dev \
+            libboost-chrono1.74-dev \
+            libboost-date-time1.74-dev \
+            libboost-serialization1.74-dev \
+            libboost-system1.74-dev \
+            libboost-thread1.74-dev \
+            redis-server
         sudo sed -ri 's/^# unixsocket/unixsocket/' /etc/redis/redis.conf
         sudo sed -ri 's/^unixsocketperm .../unixsocketperm 777/' /etc/redis/redis.conf
         sudo sed -ri 's/redis-server.sock/redis.sock/' /etc/redis/redis.conf
         sudo service redis-server start
 
-        # LIBYANG
         sudo dpkg -i ../target/debs/bookworm/libyang*1.0.73*.deb
-      displayName: "Install dependency"
+      displayName: "Install Build Dependencies and Redis"
 
     - script: |
         # SONIC YANGS
@@ -139,9 +144,10 @@ stages:
     - script: |
         set -ex
         # LIBSWSSCOMMON
-        sudo dpkg -i libswsscommon_1.0.0_amd64.deb
-        sudo dpkg -i libswsscommon-dev_1.0.0_amd64.deb
-        sudo dpkg -i python3-swsscommon_1.0.0_amd64.deb
+        # We use || true or a follow-up fix command because dpkg doesn't resolve dependencies
+        sudo dpkg -i libswsscommon_1.0.0_amd64.deb || sudo apt-get install -f -y
+        sudo dpkg -i libswsscommon-dev_1.0.0_amd64.deb || sudo apt-get install -f -y
+        sudo dpkg -i python3-swsscommon_1.0.0_amd64.deb || sudo apt-get install -f -y
       workingDirectory: $(Pipeline.Workspace)/
       displayName: 'Install libswsscommon package'
 
